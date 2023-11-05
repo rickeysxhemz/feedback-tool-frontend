@@ -41,7 +41,7 @@ function Landing() {
             <div class="form-inner">
             <div class="input-group">
             <input type="email" className="form-controls"  placeholder="  Search your device.e.g iphone 14"/>
-            <button class="btn btn-primary sub-btn" type="submit">Search &nbsp; &nbsp; &nbsp;<span><img src="assets/images/search.png" alt=""/></span></button>
+            <a class="btn btn-primary sub-btn" href="/devices">Search &nbsp; &nbsp; &nbsp;<span><img src="assets/images/search.png" alt=""/></span></a>
             </div>
             </div>
             </form>
