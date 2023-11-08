@@ -107,7 +107,7 @@ function Navbar() {
               </Link>
             </li>
          
-          {/* <li>
+          <li>
           <div className="dropdown" style={{marginTop: '30px'}}>
           <button className="gadget-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
           Dashboard Screens
@@ -123,7 +123,7 @@ function Navbar() {
           <li><a className="dropdown-item" href="/recycler">Recycler</a></li>
           </ul>
           </div>
-          </li> */}
+          </li>
           <li><a href="#" ><button class="gadget-btn">View other Gadgets</button></a></li>
         </ul>
 

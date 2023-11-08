@@ -20266,3 +20266,28 @@ button.scroll-top:focus{
 		width: 296px !important;
 	}
 }
+
+.div1-mobile{
+	background-color: #F96B07 !important;
+	left: 0%;
+    top: 0%;
+    border-radius: 20px;
+	transform: rotate(-4deg);
+	transform-origin: 100% 20%;
+	content: '';
+	width: 100% !important;
+	height: 198px;
+}
+.div2-mobile{
+	background-color: #fff !important;
+	left: 0%;
+    top: 0%;
+    border-radius: 20px;
+	transform: rotate(4deg);
+	transform-origin: 100% 0%;
+	content: '';
+	width: 100% !important;
+	height: 202px;
+	padding: 10px;
+
+}

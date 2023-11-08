@@ -70,77 +70,86 @@ function Landing() {
       </section>
 
 
-      <section class="section feature">
-        <div class="container">
+     <section className="section feature desktop-view">
+        <div className="container">
+          <div className="inner-cont" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px' }}>
+            <h3 className="text-center pt-3 pb-3"><b>How Does It Work?</b></h3>
+            <div className="col-xl-12 col-md-12 mx-auto" style={{ paddingBottom: '30px' }}>
+              <div className="row mx-auto">
+                <div className="col-xl-4 col-md-6 col-12 text-center mx-auto mt-4">
+                  <div className="feature-item freelance-count aos mx-auto">
+                    <div className="feature-icon">
+                      <img src="assets/images/search-colored.png" className="img-fluid" alt="" />
+                    </div>
+                    <div className="feature-content course-count">
+                      <h3 className="text-center">Search</h3>
+                      <p className="inner_p">Search for your device</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-4 col-md-6 col-12 text-center mx-auto mt-4">
+                  <div className="div1 freelance-count aos mx-auto middlex">
+                    <div className="div2" style={{ backgroundColor: '#fff', height: '200px', width: '195px' }}>
+                      <div className="feature-icon">
+                        <img src="assets/images/compare.png" className="img-fluid" alt="" />
+                      </div>
+                      <div className="feature-content course-count">
+                        <h3 className="text-center">Compare</h3>
+                        <p className="inner_p">Compare Offers</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-4 col-md-6 text-center mx-auto mt-4">
+                  <div className="feature-item freelance-count aos mx-auto">
+                    <div className="feature-icon">
+                      <img src="assets/images/pound.png" className="img-fluid" alt="" />
+                    </div>
+                    <div className="feature-content course-count">
+                      <h3 className="text-center">Sell</h3>
+                      <p className="inner_p">Sell Your Device</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section feature mobile-view">
+        <div className="container">
           <div className="inner-cont" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px' }}>
             <h3 className="text-center pt-3 pb-3"><b>How Does It Work?</b></h3>
             <div className="col-xl-12 col-md-12 mx-auto">
               <div className="row mx-auto">
-                <div className="col-xl-4 col-md-6 text-center mx-auto desktop-view">
-                  <div className="feature-item freelance-count">
-                    <div className="feature-icon">
-                      <img src="/assets/images/search-colored.png" className="img-fluid" alt="Search Icon" />
-                    </div>
-                    <div className="feature-content course-count">
-                      <h3 className="text-center">Search</h3>
-                      <p className="inner_p">Search for your device</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-md-6 text-center mx-auto mobile-view">
-                  <div className="feature-item-mobile freelance-count">
-                    <div className="feature-icon">
-                      <img src="/assets/images/search-colored.png" className="img-fluid" alt="Search Icon" />
-                    </div>
-                    <div className="feature-content course-count">
-                      <h3 className="text-center">Search</h3>
-                      <p className="inner_p">Search for your device</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-md-6 text-center mx-auto desktop-view">
-                  <div className="freelance-count aos mx-auto color-box">
-                    <div className="feature-icon">
-                      <img src="/assets/images/compare.png" className="img-fluid" alt="Compare Icon" />
-                    </div>
-                    <div className="feature-content course-count">
-                      <h3 className="text-center">Compare</h3>
-                      <p className="inner_p">Compare offers</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-md-6 text-center mx-auto mobile-view">
-                  <div className="freelance-count aos mx-auto color-box-mobile">
-                    <div className="feature-icon">
-                      <img src="/assets/images/compare.png" className="img-fluid" alt="Compare Icon" />
-                    </div>
-                    <div className="feature-content course-count">
-                      <h3 className="text-center">Compare</h3>
-                      <p className="inner_p">Compare offers</p>
-                      <div>&nbsp;</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-md-6 text-center mx-auto desktop-view">
-                  <div className="feature-item freelance-count aos mx-auto">
-                    <div className="feature-icon">
-                      <img src="/assets/images/pound.png" className="img-fluid" alt="Sell Icon" />
-                    </div>
-                    <div className="feature-content course-count">
-                      <h3 className="text-center">Sell</h3>
-                      <p className="inner_p">Sell Your Device</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-xl-4 col-md-6 text-center mx-auto mobile-view">
+                <div className="col-xl-4 col-md-6 col-12 text-center mx-auto">
                   <div className="feature-item-mobile freelance-count aos mx-auto">
                     <div className="feature-icon">
-                      <img src="/assets/images/pound.png" className="img-fluid" alt="Sell Icon" />
+                      <img src="assets/images/search-colored.png" className="img-fluid" alt="" />
+                    </div>
+                    <div className="feature-content course-count">
+                      <h3 className="text-center">Search</h3>
+                      <p className="inner_p">Search for your device</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-4 col-md-6 col-12 text-center mx-auto">
+                  <div className="div1-mobile freelance-count aos mx-auto middlex">
+                    <div className="div2-mobile" style={{ backgroundColor: '#fff', height: '200px', width: '195px' }}>
+                      <div className="feature-icon">
+                        <img src="assets/images/compare.png" className="img-fluid" alt="" />
+                      </div>
+                      <div className="feature-content course-count">
+                        <h3 className="text-center">Compare</h3>
+                        <p className="inner_p">Compare Offers</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-4 col-md-6 text-center mx-auto mt-2">
+                  <div className="feature-item-mobile freelance-count aos mx-auto">
+                    <div className="feature-icon">
+                      <img src="assets/images/pound.png" className="img-fluid" alt="" />
                     </div>
                     <div className="feature-content course-count">
                       <h3 className="text-center">Sell</h3>
@@ -148,7 +157,6 @@ function Landing() {
                     </div>
                   </div>
                 </div>
-                <div>&nbsp;</div>
               </div>
             </div>
           </div>
