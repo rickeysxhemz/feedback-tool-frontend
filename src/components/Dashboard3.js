@@ -1,85 +1,180 @@
-import React from 'react';
+import {React,useEffect} from 'react';
 // import logo from './assets/images/logo.png';
 // import './App.css';
+import { useLocation,useParams } from 'react-router-dom';
+import axios from 'axios';
+import ReactQuill,{Quill} from 'react-quill';
+import quillEmoji from 'quill-emoji';
+import 'react-quill/dist/quill.snow.css';
+import { baseUrl } from '../BaseUrl'
+import AlertMessage from '../components/alerts';
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import moment from 'moment';
 
-function Dashboard3() {
+
+function Dashboard3(props) {
+  const { EmojiBlot, ShortNameEmoji, ToolbarEmoji, TextAreaEmoji } = quillEmoji;
+
+Quill.register({
+  'formats/emoji': EmojiBlot,
+  'modules/emoji-shortname': ShortNameEmoji,
+  'modules/emoji-toolbar': ToolbarEmoji,
+  'modules/emoji-textarea': TextAreaEmoji
+}, true);
+
+
+  const modules = {
+    toolbar: [
+      [{ 'font': [] }, { 'header': [] }],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+      [{ 'align': [] }],
+      ['emoji'],
+      ['link', 'image'],
+      ['clean']
+    ],
+    'emoji-toolbar': true,
+    "emoji-textarea": true,
+    "emoji-shortname": true,
+  }
+
+  const formats = ['font', 'header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'color', 'background', 'list', 'indent', 'align', 'link', 'image', 'clean', 'emoji']
+
+
+
+
+  const { id } = useParams();
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [comment, setNewComment] = useState('');
+  function SetHeader() {
+    const token = localStorage.getItem('token')
+    axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
+  }
+  useEffect(() => {
+    SetHeader();
+      axios.get(`${baseUrl}/api/feedback/view/${id}`)
+        .then(res => {
+          if (res.errors?.length) {
+            AlertMessage("error", 'Unable to fetch data')
+          } else {
+            setShowFeedback(res.data.records);
+            setComments(res.data.records.comments);
+            console.log(res.data.records.comments)
+          }
+        });
+    
+  }, [id]);
+  const handleAddComment = () => {
+    // Add new comment
+    console.log('in the handle funciton',comment)
+    axios.post(`${baseUrl}/api/feedback/comment`, {
+      feedback_id: id,
+      comment: comment,
+    })
+    .then(res => {
+      if (res.errors?.length) {
+        AlertMessage("error", 'Unable to add comment')
+      } else {
+        // Refresh comments after adding a new comment
+        axios.get(`${baseUrl}/api/feedback/comments/${id}`)
+          .then(res => {
+            if (res.errors?.length) {
+              AlertMessage("error", 'Unable to fetch comments')
+            } else {
+              setComments(res.data.records);
+              setNewComment('');
+            }
+          });
+      }
+    });
+  };
     return (       
         <div className="main-wrapper">
         <div className="content-o">
           <div className="container">
             <div className="col-md-12" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
-              <h3 className="text-center"><b>Order Details</b></h3>
+              <h3 className="text-center"><b>Feedback Details</b></h3>
               <div className="row">
                 <div className="col">
-                  <span><b>Make</b></span><br />
-                  <span><b>Apple</b></span>
+                  <span><b>UserName</b></span><br />
+                  <span><b>{showFeedback?.user?.username}</b></span>
                 </div>
                 <div className="col">
-                  <span><b>Model</b></span><br />
-                  <span><b>iphone13</b></span>
+                  <span ><b>Feedback Name</b></span><br />
+                  <span ><b>{showFeedback?.title}</b></span>
                 </div>
                 <div className="col">
-                  <span><b>Capacity</b></span><br />
-                  <span><b>256 GB</b></span>
+                  <span><b>Feedback Category</b></span><br />
+                  <span><b>{showFeedback?.category}</b></span>
                 </div>
                 <div className="col">
-                  <span><b>Network</b></span><br />
-                  <span><b>Unlocked</b></span>
-                </div>
+                  <span><b>Feedback Description</b></span><br />
+                  <span><b>{showFeedback?.description}</b></span>
+                  </div>
                 <div className="col">
-                  <span><b>Condition</b></span><br />
-                  <span><b>Good</b></span>
-                </div>
-                <div className="col">
-                  <span><b>Value</b></span><br />
-                  <span><b>100</b></span>
-                </div>
-                <div className="col">
-                  <span><b>Comission</b></span><br />
-                  <span><b>100</b></span>
-                </div>
+                  <span><b>Feedback Date</b></span><br />
+                  <span><b>{showFeedback ? moment(showFeedback.created_at).format('MMMM Do YYYY, h:mm:ss a') : 'N/A'}</b></span>
+                  </div>
+                  <div className="col">
+                  <span><b>Total Votes</b></span><br />
+                  <span><b>{showFeedback?.vote_count}</b></span>
+                  </div>
+                
               </div>
             </div>
             <div>&nbsp;</div>
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-6 mt-4">
-                  <div className="inner-box-left" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
-                    <h2 className="text-center"><b>Customer Details</b></h2>
-                    <span><b>Name : </b>John</span><br />
-                    <span><b>House No : </b>05</span><br />
-                    <span><b>Road Name : </b>123, HN</span><br />
-                    <span><b>City/Town : </b>London</span><br />
-                    <span><b>Country : </b>Berkshires</span><br />
-                    <span><b>Postcode : </b>SW111WW</span><br />
-                    <span><b>Email : </b>zys@gmail.com</span><br />
-                    <span><b>Phone No : </b>73243876827</span><br />
+            <div className="col-md-12 mt-4">
+              <div className="box1" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
+                <h2 className="text-center"><b>Comments</b></h2>
+                {comments.map(comment => (
+                  <div key={comment.id} style={{marginLeft:'3rem'}}>
+                    {/* Display the commenting user's name */}
+                    <p><strong>{comment?.user?.name}</strong></p>
+
+                    {/* Render the styled text from ReactQuill */}
+                    <p dangerouslySetInnerHTML={{ __html: comment.comment }}></p>
+
+                    {/* Display the timestamp */}
+                    <p>{moment(comment.created_at).format('MMMM Do YYYY, h:mm:ss a')}</p>
                   </div>
-                </div>
-                <div className="col-md-6 mt-4">
-                  <div className="box1" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
-                    <h2 className="text-center"><b>Order Details</b></h2>
-                    <span><b>Order Id : </b>2124</span><br />
-                    <span><b>Transaction Token Id : </b>2124</span><br />
-                    <span><b>Order Status : </b>Confirm</span><br />
-                    <span><b>Date : </b>04/11/2022</span><br />
-                  </div>
-                  <div>&nbsp;</div>
-                  <div className="box1" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
-                    <h2 className="text-center"><b>Payment Methods</b></h2>
-                    <span><b>Bank Transfer : </b>Yes</span><br />
-                    <span><b>Account Name : </b>John smith</span><br />
-                    <span><b>Account Number : </b>1233344</span><br />
-                    <span><b>Sort Code : </b>10-10-10</span><br />
-                  </div>
-                  <div>&nbsp;</div>
-                  <div className="box1" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
-                    <h2 className="text-center"><b>Postage Details</b></h2>
-                    <span><b>Postage Method : </b>Free Sales Pack</span><br />
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
+          {/* Comment Box */}
+          <div className="col-md-12 mt-4">
+                {showFeedback?.comment_status === 'enable' && (
+                  <div className="box1" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
+                    <h2 className="text-center"><b>Add Comment</b></h2>
+                    <ReactQuill
+                      theme="snow"
+                      modules={modules}
+                      formats={formats}
+                      value={comment}
+                      onChange={(value) => setNewComment(value)}
+                    />
+                    <br />
+                    <button
+                      style={{
+                        border: '0px',
+                        backgroundColor: 'green',
+                        color: '#fff',
+                        borderRadius: '10px',
+                        padding: '10px',
+                        textAlign: 'center',
+                        lineHeight: '1.5',
+                        margin: '5px',
+                        display: 'inline-block'
+                      }}
+                      onClick={handleAddComment}
+                    >
+                      Add Comment
+                    </button>
+                  </div>
+                )}
+              </div>
           </div>
         </div>
       </div>

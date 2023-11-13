@@ -1,7 +1,88 @@
 import React from 'react';
 // import './App.css';
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { baseUrl } from '../BaseUrl'
+import { useEffect, useState } from 'react';
+import AlertMessage from '../components/alerts';
+import  Pagination  from './pagination/Pagination';
+
 
 function Dashboard1() {
+  // if (!localStorage.getItem('token') || localStorage.getItem('role') !== '"admin"' ) {
+  //   window.location.href = "/login";
+  // }
+  
+  
+  const [currentPage, setCurrentPage] = useState(1)
+  const [lastPage, setLastPage] = useState(10)
+  const [loading, setLoading] = useState(false)
+  const [feedbacks, setFeedbacks] = useState([])
+  
+  function SetHeader() {
+    const token = localStorage.getItem('token')
+    axios.defaults.headers.common["Authorization"] = 'Bearer ' + token;
+  }
+  const fetchData = (page) => {
+    SetHeader();
+    setLoading(true);
+    axios.get(`${baseUrl}/api/feedbacks/list?page=${page}`)
+      .then(res => {
+        if (res.errors?.length) {
+          AlertMessage("error", 'Unable to fetch data')
+        } else {
+          setFeedbacks(res.data.records.data);
+          setCurrentPage(res.data.records.current_page);
+          setLastPage(res.data.records.last_page);
+          setLoading(false);
+        }
+      });
+  };
+
+  const handleEnable = (feedbackId) => {
+    axios.get(`${baseUrl}/api/feedbacks/status/${feedbackId}`)
+      .then(res => {
+        if (res.errors?.length) {
+          AlertMessage("error", 'Unable to fetch data')
+        } else {
+          AlertMessage("success", res.data._metadata.message);
+          fetchData(currentPage); // Fetch updated data after enabling
+        }
+      });
+  };
+
+  const handleDelete = (feedbackId) => {
+    axios.get(`${baseUrl}/api/feedbacks/delete/${feedbackId}`)
+      .then(res => {
+        if (res.errors?.length) {
+          AlertMessage("error", 'Unable to fetch data')
+        } else {
+          AlertMessage("success", res.data._metadata.message);
+          fetchData(currentPage); // Fetch updated data after deleting
+        }
+      });
+  };
+  
+  const calculateContinuousCount = (index) => {
+    return (currentPage - 1) * 10 + index + 1;
+  };
+
+  useEffect(() => {
+    fetchData(currentPage);
+  }, [currentPage]);
+  
+  
+  const location = useLocation();
+  const navigate = useNavigate();
+  const LogOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+    navigate('/login')
+
+  }
+
+
     return (       
     <div className="main-wrapper">
     <div className="content-o">
@@ -15,130 +96,90 @@ function Dashboard1() {
               <div style={{ border: '0px', backgroundColor: '#FFEECD', color: '#000', borderRadius: '20px', paddingTop: '8px', paddingBottom: '1px' }}>
                 <div className="list">
                   <ul>
-                    <li><a href="">Home</a></li>
-                    <li><a href="">Dashboard</a></li>
-                    <li><a href="">Order Details</a></li>
-                    <li><a href="">Order Status</a></li>
+                  <li><NavLink to="/dashboard1">Feedbacks</NavLink></li>
+                    <li><NavLink to="/user">User</NavLink></li>
+                    <li  onClick={() => { LogOut() }}><NavLink to="#">Logout</NavLink></li>
+                    
                   </ul>
                 </div>
               </div>
             </div>
-            <div className="col-md-3"></div>
-
-            <div className="col-md-4 banner-content-o mt-2 desktop-view">
-              <div className="search-right">
-                <form className="form" name="store" id="store" method="post" action="#">
-                  <div className="form-inner">
-                    <div className="input-group">
-                      <input type="email" className="form-controls" placeholder="" />
-                      <button className="btn btn-primary sub-btn" type="submit">Search &nbsp; &nbsp; &nbsp;<span><img src="assets/images/search.png" alt="" /></span></button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <div className="col-md-4 banner-content-m mt-2 mobile-view">
-              <div className="search-right">
-                <form className="form" name="store" id="store" method="post" action="#">
-                  <div className="form-inner">
-                    <div className="input-group">
-                      <input type="email" className="form-controls" placeholder="" />
-                      <button className="btn btn-primary sub-btn" type="submit">Search &nbsp; &nbsp; &nbsp;<span><img src="assets/images/search.png" alt="" /></span></button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
 
           </div>
         </div>
-        <div className="col-md-12">
-          <div className="row">
-            <div className="col-md-10">
-              <div className="left-content mt-2">
-                <button style={{ border: '0px', backgroundColor: '#FFEECD', color: '#000', borderRadius: '20px', padding: '7px 30px 7px 10px' }}>
-                  <i className="fa fa-calendar"></i> Start Date
-                </button>
-                <button style={{ border: '0px', backgroundColor: '#FFEECD', color: '#000', borderRadius: '20px', padding: '7px 30px 7px 10px' }}>
-                  <i className="fa fa-calendar"></i> End Date
-                </button>
-              </div>
-            </div>
-            <div className="col-md-2">
-              <div className="image-right">
-                  <img src="assets/images/fone-bucks.png" alt="" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
+        
+        <div style={{marginTop:'1rem'}}className="row">
           <div className="col-md-12" style={{ backgroundColor: '#FFEECD', paddingLeft: '50px', paddingRight: '50px', borderRadius: '30px', padding: '10px 20px 20px 20px', alignContent: 'middle' }}>
             <div className="account-content">
               <div className="align-items-center justify-content-center">
                 <div className="table" style={{overflow:'auto'}}>
                   <table>
                     <tr>
-                      <th>Select</th>
-                      <th>Order Id</th>
-                      <th>Customer</th>
-                      <th>Order Details</th>
-                      <th>Value</th>
-                      <th>Commission</th>
-                      <th>Status</th>
-                      <th>Date</th>
-                      <th>Search</th>
+                      <th>id</th>
+                      <th>User Name</th>
+                      <th>Feedback Title</th>
+                      <th>Description</th>
+                      <th>Category</th>
+                      <th>Vote Count</th>
+                      <th>Comment</th>
+                      <th>Delete</th>
                     </tr>
-                    <tr>
-                      <td><b><input type="checkbox" /></b></td>
-                      <td><b>1123</b></td>
-                      <td><b>John</b></td>
-                      <td><b>Iphone 14 pro max</b></td>
-                      <td><b>$105.50</b></td>
-                      <td><b>$105.50</b></td>
-                    </tr>
-                    <tr>
-                      <td><b><input type="checkbox" /></b></td>
-                      <td><b>1123</b></td>
-                      <td><b>John</b></td>
-                      <td><b>Iphone 14 pro max</b></td>
-                      <td><b>$105.50</b></td>
-                      <td><b>$105.50</b></td>
-                    </tr>
-                    <tr>
-                      <td><b><input type="checkbox" /></b></td>
-                      <td><b>1123</b></td>
-                      <td><b>John</b></td>
-                      <td><b>Iphone 14 pro max</b></td>
-                      <td><b>$105.50</b></td>
-                      <td><b>$105.50</b></td>
-                    </tr>
-                    <tr>
-                      <td><b><input type="checkbox" /></b></td>
-                      <td><b>1123</b></td>
-                      <td><b>John</b></td>
-                      <td><b>Iphone 14 pro max</b></td>
-                      <td><b>$105.50</b></td>
-                      <td><b>$105.50</b></td>
-                    </tr>
-                    <tr>
-                      <td><b><input type="checkbox" /></b></td>
-                      <td><b>1123</b></td>
-                      <td><b>John</b></td>
-                      <td><b>Iphone 14 pro max</b></td>
-                      <td><b>$105.50</b></td>
-                      <td><b>$105.50</b></td>
-                    </tr>
-                    <tr>
-                      <td><b><input type="checkbox" /></b></td>
-                      <td><b>1123</b></td>
-                      <td><b>John</b></td>
-                      <td><b>Iphone 14 pro max</b></td>
-                      <td><b>$105.50</b></td>
-                      <td><b>$105.50</b></td>
-                    </tr>
+                    {loading ? (
+                    <div>Loading...</div>
+                  ) : (
+                    feedbacks.map((feedback, index) => (
+                      <tr key={index}>
+                        <td><b>{calculateContinuousCount(index)}</b></td>
+                        <td><b>1123</b></td>
+                        <td><b>{feedback.title}</b></td>
+                        <td><b>{feedback.description}</b></td>
+                        <td><b>{feedback.category}</b></td>
+                        <td><b>{feedback.vote_count}</b></td>
+                        <td>
+                          <button
+                            style={{
+                              border: '0px',
+                              backgroundColor: '#b8868f',
+                              color: '#fff',
+                              borderRadius: '10px',
+                              padding: '10px',
+                              textAlign: 'center',
+                              lineHeight: '1.5',
+                              margin: '5px',
+                              display: 'inline-block'
+                            }}
+                            onClick={() => handleEnable(feedback.id)}
+                          >
+                            {feedback?.comment_status}
+                          </button>
+                        </td>
+                        <td>
+                        <button
+                            style={{
+                              border: '0px',
+                              backgroundColor: 'red',
+                              color: '#fff',
+                              borderRadius: '10px',
+                              padding: '10px',
+                              textAlign: 'center',
+                              lineHeight: '1.5',
+                              margin: '5px',
+                              display: 'inline-block'
+                            }}
+                            onClick={() => handleDelete(feedback.id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                  
                   </table>
                 </div>
+                <div style={{marginTop:'1rem',textAlign:'center'}}>
+                <Pagination currentPage={currentPage} setCurrentPage={setCurrentPage} lastPage={lastPage} />
+              </div>
               </div>
             </div>
           </div>

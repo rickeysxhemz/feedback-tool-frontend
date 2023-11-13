@@ -1,26 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes,Switch, useLocation} from 'react-router-dom';
 import './index.css';
 import App from './App';
-// import Navbar from './Navbar';
 import reportWebVitals from './reportWebVitals';
-// import Checkout from './Checkout';
-// import Login from './Login';
-// import Dashboard1 from './components/Dashboard1';
-// import Dashboard2 from './components/Dashboard2';
-// import Dashboard3 from './components/Dashboard3';
-// import Dashboard4 from './components/Dashboard4';
-// import Dashboard5 from './components/Dashboard5';
-// import Masterdashboard1 from './components/Masterdashboard1';
-// import Masterdashboard2 from './components/Masterdashboard2';
-// import Recyclerdetaildashboard from './components/Recyclerdetaildashboard';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import "./toast.css";
+
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App /> 
+   <ToastContainer
+          position="top-right"
+          // autoClose={5000}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+    <App />
+    <ToastContainer />
  </React.StrictMode>
 );
 

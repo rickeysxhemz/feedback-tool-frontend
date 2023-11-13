@@ -36,3 +36,71 @@
     transform: rotate(360deg);
   }
 }
+/* WelcomeComponent.css */
+
+.center-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5; /* Set your desired background color */
+}
+
+.welcome-box {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff; /* Set your desired box background color */
+}
+
+.welcome-text {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333; /* Set your desired text color */
+}
+
+.styled-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  /* Add your desired button styles */
+}
+.center-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.welcome-box {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.welcome-text {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.styled-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff; /* Set your desired button background color */
+  color: #fff; /* Set your desired button text color */
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.styled-button:hover {
+  background-color: #0056b3; /* Set your desired button background color on hover */
+}
