@@ -10,6 +10,8 @@ import { baseUrl } from '../BaseUrl'
 import AlertMessage from '../components/alerts';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import QuillMention from 'quill-mention';
+import 'quill-mention/dist/quill.mention.css';
 import moment from 'moment';
 
 
@@ -23,7 +25,29 @@ Quill.register({
   'modules/emoji-textarea': TextAreaEmoji
 }, true);
 
+const mentionModule = {
+  allowedChars: /^[A-Za-z\s]*$/,
+  mentionDenotationChars: ["@", "#"],
+  source: function (searchTerm, renderList, mentionChar) {
+    let values;
 
+    if (mentionChar === "@") {
+      values = atValues;
+    } else {
+      values = hashValues;
+    }
+
+    if (searchTerm.length === 0) {
+      renderList(values, searchTerm);
+    } else {
+      const matches = values.filter(user => user.value.toLowerCase().includes(searchTerm.toLowerCase()));
+      renderList(matches, searchTerm);
+    }
+  },
+};
+if (!Quill.imports['modules/mention']) {
+  Quill.register('modules/mention', QuillMention);
+}
   const modules = {
     toolbar: [
       [{ 'font': [] }, { 'header': [] }],
@@ -38,9 +62,10 @@ Quill.register({
     'emoji-toolbar': true,
     "emoji-textarea": true,
     "emoji-shortname": true,
+    // mention: mentionModule,
   }
 
-  const formats = ['font', 'header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'color', 'background', 'list', 'indent', 'align', 'link', 'image', 'clean', 'emoji']
+  const formats = ['font', 'header', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'color', 'background', 'list', 'indent', 'align', 'link', 'image', 'clean', 'emoji','mention']
 
 
 
@@ -91,6 +116,29 @@ Quill.register({
       }
     });
   };
+  const [atValues, setAtValues] = useState([]);
+  const [hashValues, setHashValues] = useState([]);
+
+useEffect(() => {
+      SetHeader();
+    // Fetch user data from the API
+    axios.get(`${baseUrl}/api/user/mention`)
+      .then(response => {
+        const users = response.data.records;
+        // Update atValues and hashValues with the retrieved user data
+        const newAtValues = users.map(user => ({ id: user.id, value: user.name }));
+        const newHashValues = users.map(user => ({ id: user.id + 1000, value: user.name + ' 2' }));
+
+        setAtValues(newAtValues);
+        setHashValues(newHashValues);
+        console.log(response.data.records)
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+      });
+  }, []); // Empty dependency array ensures this effect runs once, equivalent to componentDidMount
+
+
     return (       
         <div className="main-wrapper">
         <div className="content-o">
